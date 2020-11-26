@@ -31,7 +31,8 @@
 from dlog import DLog
 
 if __name__ == '__main__':
-     # ----------- 设定日志目录绝对路径（强烈建议） -----------
+    # ----------- 设定日志目录绝对路径（强烈建议） -----------
+    # 如果没有指定日志目录，则日志目录在 现在现在的执行文件的平级目录下。
     import os
 
     RootPath = os.path.dirname(os.path.realpath(__file__))
@@ -60,6 +61,13 @@ if __name__ == '__main__':
     log3.info('nice')
     log3.warning('nice')
     log3.error('nice')
+
+    # ----------- 设置日志分割大小为10Mb，备份数量 7 份-----------
+    log4 = DLog(max_bytes=10, backup_count=7).get_log
+
+    log4.info('nice')
+    log4.warning('nice')
+    log4.error('nice')
 ```
    
 ### 版本说明
@@ -72,7 +80,7 @@ if __name__ == '__main__':
     
 
 ### todo
- 
+    自定义修改日志格式
     
 ### 感谢
 dlog本身，集合了很多不知名的前辈的杰作，我的贡献和他们比起来，微乎其微。
