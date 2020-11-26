@@ -1,7 +1,7 @@
 [TOC]
 
 ### 介绍
-呆log：工业中，python日志模块，安装即用。理论上支持 python2,  python3  
+呆log：工业中，python日志模块，安装即用。
 
 为什么需要这个模块：    
 
@@ -11,9 +11,6 @@
     4. 可能，真的很优雅
     5. 很简单创建新的日志文件类型
     6. 未来会变成python日志最佳实践
-   
-注意：目前在 centos7.5 环境，mac环境，python3.6， 3.7 测试过。 其他环境，使用前请自行测试。年轻人，要讲码德，望好自为之。  
- 
 
 [github 地址](https://github.com/RiseInRose/dlog)
 
