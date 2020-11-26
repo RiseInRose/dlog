@@ -4,7 +4,7 @@
 # wechat chending2012
 from dlog.logger import DLog
 
-__version__ = '1.0.1'
+__version__ = '1.0.3'
 
 
 def int_or_str(value):

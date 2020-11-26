@@ -2,6 +2,14 @@
 # author caturbhuja
 # date   2020/11/24 2:43 下午
 # wechat chending2012
+"""
+python3.9 日志文档
+https://docs.python.org/zh-cn/3/library/logging.html
+
+自定义 日志输出格式，请参考 LogRecord 属性
+https://docs.python.org/zh-cn/3/library/logging.html#logrecord-attributes
+
+"""
 import logging
 from logging import config as log_config
 import os
@@ -13,7 +21,8 @@ from dlog.decorator import with_metaclass, Singleton
 
 class DLog(with_metaclass(Singleton)):
     def __init__(
-            self, debug=False, singleton=False, log_dir_path=None, new_log_file_list=None, user_config=None, **kwargs
+            self, debug=False, only_console=False, singleton=False, log_dir_path=None, new_log_file_list=None,
+            user_config=None, **kwargs
     ):
         """
         :param debug: debug模式
@@ -27,6 +36,7 @@ class DLog(with_metaclass(Singleton)):
         log_dir_path = log_dir_path or "{}{}logs".format(path, os.sep)
         self._check_dir_exists(log_dir_path)
         # 准备参数
+        # 如果用户直接自定义全部的日志配置json
         if user_config:
             self._final_config = user_config
         else:
@@ -35,12 +45,25 @@ class DLog(with_metaclass(Singleton)):
                 {"file_name": "warning", "log_level": "warning"},
                 {"file_name": "error", "log_level": "error"},
             ]
+            log_name_list = set([each["file_name"] for each in self._build_in_log_args])
+            # 合并用户自定义的日志 详细配置
             if new_log_file_list is not None:
                 if not isinstance(new_log_file_list, list):
                     raise TypeError("new_log_file_list must be list, now is type{}".format(type(new_log_file_list)))
-                self._build_in_log_args.extend(new_log_file_list)
+                # 为了用户配置方便，这里就牺牲下性能。懒得搞新的数据结构。
+                # 如果发现 new_log_file_list 里面有 和 _build_in_log_args 同名的，则更新 _build_in_log_args内配置，没有则直接添加
+                for each_new in new_log_file_list:
+                    if each_new["file_name"] in log_name_list:
+                        for index, each_old in enumerate(self._build_in_log_args):
+                            if each_old["file_name"] == each_new["file_name"]:
+                                self._build_in_log_args.pop(index)
+                                self._build_in_log_args.append(each_new)
+                                break
+                    else:
+                        self._build_in_log_args.append(each_new)
             self._final_config = ConfigCook.cook(
-                only_console=False, debug=debug, file_list=self._build_in_log_args, log_dir_path=log_dir_path, **kwargs
+                only_console=only_console, debug=debug, file_list=self._build_in_log_args, log_dir_path=log_dir_path,
+                **kwargs
             )
         self.log = self._cook_log(self._final_config)
 

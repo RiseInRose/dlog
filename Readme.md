@@ -44,9 +44,29 @@ if __name__ == '__main__':
     log.error('nice')
 
     # ----------- 添加新的日志类型 -----------
+    # 1.0.2 新功能
     new_log_file_list = [{"file_name": "access", "log_level": "info"}, ]
-    log1 = DLog(new_log_file_list=new_log_file_list).get_log   # 这个方式，日志目录在 现在这个文件平级目录下。
+    log1 = DLog(new_log_file_list=new_log_file_list).get_log
     log1.access('access my lord')
+
+    # ----------- 修改日志格式 -----------
+    # 1.0.3 新功能
+    new_log_file_list = [
+        {"file_name": "access", "log_level": "warning", "format": "%(levelname)s: %(message)s"},
+        {"file_name": "info", "log_level": "info", "format": "%(asctime)s: %(message)s"},
+    ]
+    log5 = DLog(new_log_file_list=new_log_file_list)
+    print(log5.show_log_config)     # 显示日志配置文件
+    log5 = log5.get_log
+    log5.info('change my info format')
+    log5.access('warning my info format')
+
+    # ----------- 设置日志分割大小为10Mb，备份数量 7 份-----------
+    log4 = DLog(max_bytes=10, backup_count=7).get_log
+
+    log4.info('nice')
+    log4.warning('nice')
+    log4.error('nice')
 
     # ----------- 开启单例模式 -----------
     log2 = DLog(singleton=True).get_log
@@ -56,21 +76,15 @@ if __name__ == '__main__':
     log2.error('nice')
 
     # ----------- 一般方式 -----------
-    log3 = DLog().get_log   # 这个方式，日志目录在 现在这个文件平级目录下。
-    
+    log3 = DLog().get_log 
+
     log3.info('nice')
     log3.warning('nice')
     log3.error('nice')
-
-    # ----------- 设置日志分割大小为10Mb，备份数量 7 份-----------
-    log4 = DLog(max_bytes=10, backup_count=7).get_log
-
-    log4.info('nice')
-    log4.warning('nice')
-    log4.error('nice')
 ```
    
 ### 版本说明
+    1.0.3 支持 用户 设置日志输出样式，详见文档 《添加新的日志类型》。    caturbhuja
     1.0.2 支持 用户新添加 新日志文件，详见文档 《添加新的日志类型》。    caturbhuja
     1.0.1 第一个版本，能用，但是没有达到最佳实践。    caturbhuja
 
@@ -80,7 +94,7 @@ if __name__ == '__main__':
     
 
 ### todo
-    自定义修改日志格式
+    
     
 ### 感谢
 dlog本身，集合了很多不知名的前辈的杰作，我的贡献和他们比起来，微乎其微。
