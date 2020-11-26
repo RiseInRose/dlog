@@ -33,7 +33,8 @@ class DLog(with_metaclass(Singleton)):
         :param kwargs: 其他参数
         """
         path = os.path.dirname(inspect.stack()[2].filename)
-        log_dir_path = log_dir_path or "{}{}logs".format(path, os.sep)
+        log_dir_path = log_dir_path or path
+        log_dir_path = "{}{}logs".format(log_dir_path, os.sep)
         self._check_dir_exists(log_dir_path)
         # 准备参数
         # 如果用户直接自定义全部的日志配置json

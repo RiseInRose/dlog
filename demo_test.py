@@ -10,9 +10,7 @@ if __name__ == '__main__':
     import os
 
     RootPath = os.path.dirname(os.path.realpath(__file__))
-    log_dir_path = os.path.join(RootPath, 'logs')
-
-    log = DLog(log_dir_path=log_dir_path).get_log
+    log = DLog(log_dir_path=RootPath).get_log
     log.info('nice')
     log.warning('nice')
     log.error('nice')

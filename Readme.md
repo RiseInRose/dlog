@@ -36,9 +36,8 @@ if __name__ == '__main__':
     import os
 
     RootPath = os.path.dirname(os.path.realpath(__file__))
-    log_dir_path = os.path.join(RootPath, 'logs')
 
-    log = DLog(log_dir_path=log_dir_path).get_log
+    log = DLog(log_dir_path=RootPath).get_log
     log.info('nice')
     log.warning('nice')
     log.error('nice')
@@ -84,6 +83,7 @@ if __name__ == '__main__':
 ```
    
 ### 版本说明
+    1.0.4 优化用户自定义输入路径。      caturbhuja
     1.0.3 支持 用户 设置日志输出样式，详见文档 《添加新的日志类型》。    caturbhuja
     1.0.2 支持 用户新添加 新日志文件，详见文档 《添加新的日志类型》。    caturbhuja
     1.0.1 第一个版本，能用，但是没有达到最佳实践。    caturbhuja
