@@ -15,14 +15,14 @@ from logging import config as log_config
 import os
 import inspect
 from collections import namedtuple
-from dlog.conf.split_by_maxBytes import ConfigCook  # todo 还有一个按照日期分割，暂时不测试了。
+from dlog.handles.split_by_maxBytes import ConfigCook  # todo 还有一个按照日期分割，暂时不测试了。
 from dlog.decorator import with_metaclass, Singleton
 
 
 class DLog(with_metaclass(Singleton)):
     def __init__(
             self, debug=False, only_console=False, singleton=False, log_dir_path=None, new_log_file_list=None,
-            user_config=None, **kwargs
+            user_config=None, multiprocess_safe=True, **kwargs
     ):
         """
         :param debug: debug模式
@@ -64,7 +64,7 @@ class DLog(with_metaclass(Singleton)):
                         self._build_in_log_args.append(each_new)
             self._final_config = ConfigCook.cook(
                 only_console=only_console, debug=debug, file_list=self._build_in_log_args, log_dir_path=log_dir_path,
-                **kwargs
+                multiprocess_safe=multiprocess_safe, **kwargs
             )
         self.log = self._cook_log(self._final_config)
 
@@ -75,7 +75,7 @@ class DLog(with_metaclass(Singleton)):
 
     def _cook_log(self, config: dict):
         log_config.dictConfig(config)
-        log_name_list = [each["file_name"] for each in self._build_in_log_args]
+        log_name_list = [each for each in config["loggers"]]
         log_nt = namedtuple('log', log_name_list)
         log_nt_dict = dict()
         for each in self._build_in_log_args:

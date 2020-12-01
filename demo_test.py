@@ -3,6 +3,7 @@
 # date   2020/11/25 2:43 下午 
 # wechat chending2012
 from dlog import DLog
+from dlog_pack.dlog import DLog
 
 if __name__ == '__main__':
     # ----------- 设定日志目录绝对路径（强烈建议） -----------
@@ -10,7 +11,7 @@ if __name__ == '__main__':
     import os
 
     RootPath = os.path.dirname(os.path.realpath(__file__))
-    log = DLog(log_dir_path=RootPath).get_log
+    log = DLog(log_dir_path=RootPath, multiprocess_safe=False).get_log
     log.info('nice')
     log.warning('nice')
     log.error('nice')
@@ -51,3 +52,11 @@ if __name__ == '__main__':
     log3.info('nice')
     log3.warning('nice')
     log3.error('nice')
+
+    # ----------- 关闭进程安全， -----------
+    # 目前一直单例模式下，开启进程安全，日志会报获取不到进程锁的问题，但是不影响使用
+    RootPath = os.path.dirname(os.path.realpath(__file__))
+    log = DLog(log_dir_path=RootPath, multiprocess_safe=False).get_log
+    log.info('nice')
+    log.warning('nice')
+    log.error('nice')

@@ -20,7 +20,7 @@ class ConfigCook:
     @staticmethod
     def _make_handlers(
             handler_name, log_level, log_path, max_bytes, backup_count, encoding,
-            formatter_name='standard', debug=False
+            formatter_name='standard', debug=False, multiprocess_safe=True
     ):
         handler_dict = {
             # 输出到文件
@@ -41,6 +41,8 @@ class ConfigCook:
                 'stream': sys.stdout
             },
         }
+        if not multiprocess_safe:
+            handler_dict[handler_name]["class"] = 'logging.handlers.RotatingFileHandler'
         return handler_dict
 
     @staticmethod
@@ -88,7 +90,7 @@ class ConfigCook:
     @classmethod
     def cook(
             cls, file_list, log_dir_path, debug=False, only_console=False, max_bytes=50, backup_count=7,
-            encoding='utf-8'
+            encoding='utf-8', multiprocess_safe=True
     ):
         frame = cls._make_logger_framework()
         for each in file_list:
@@ -112,7 +114,8 @@ class ConfigCook:
             log_path = os.path.join(log_dir_path, "{}.log".format(each["file_name"]))
             make_handlers_kwargs = {
                 "handler_name": each["file_name"], "log_level": log_level, "log_path": log_path,
-                "max_bytes": max_bytes, "backup_count": backup_count, "encoding": encoding, "debug": debug
+                "max_bytes": max_bytes, "backup_count": backup_count, "encoding": encoding, "debug": debug,
+                "multiprocess_safe": multiprocess_safe
             }
             if format_:
                 make_handlers_kwargs["formatter_name"] = formatter_name
